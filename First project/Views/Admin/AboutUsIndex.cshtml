@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Aboutu>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+<h1>About us page management</h1>
+
+<p>
+    <a asp-action="AboutUsCreate">Fill in data here</a>
+</p>
+
+<div class="card-block table-border-style">
+    <div class="table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageFile)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Header)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AboutusContent)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img src=@Url.Content("~/images/" + @item.AboutusImagePath)
+                          width="50" height="50"
+                     asp-append-version="true" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Header)
+                </td>
+                <td >
+                    <textarea disabled cols="50" rows="15" style=" border: none; resize:none">
+                        @Html.DisplayFor(modelItem => item.AboutusContent)
+                    </textarea>
+                </td>
+                <td>
+                    <a asp-action="AboutUsEdit" asp-route-id="@item.AboutUs">Edit</a> |
+                    <a asp-action="AboutUsDetails" asp-route-id="@item.AboutUs">Details</a> |
+                    <a asp-action="AboutUsDelete" asp-route-id="@item.AboutUs">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+    </div>
+</div>

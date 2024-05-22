@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewData["Title"] = "RegisteredChefs";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    List<User> chefInfo = ViewBag.RegisteredChefsInfo;
+    int rowCount = 1;
+}
+
+<h1>Registered Chefs</h1>
+
+<!-- Hover table card start -->
+<div class="card">
+    <div class="card-block table-border-style">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Full name</th>
+                        <th>Email</th>
+                        <th>Specialization</th>
+                        <th>Gender</th>
+                        <th>Birthdate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                 
+                        @foreach(var item in chefInfo)
+                        {
+                        <tr>
+                            <th scope="row">@rowCount</th>
+                            <td>@item.UserName</td>
+                            <td>
+                                @item.Credential.Email
+                            </td>
+                            <td>
+                                @item.Specialization
+                            </td>
+                            <td>
+                                @item.Gender
+                            </td>
+                            <td>
+                                @item.Birthdate
+                            </td>
+                            
+                              </tr>
+                        {
+                            rowCount += 1;
+                        }
+                        } 
+                  
+                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Hover table card end -->

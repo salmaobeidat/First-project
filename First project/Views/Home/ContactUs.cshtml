@@ -1,0 +1,57 @@
+﻿@model Contactu
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<!-- Contact us section -->
+<section class="book_section layout_padding">
+    <div class="container">
+        <div class="heading_container">
+            <h2 style="text-align:center">
+                Contact Us
+            </h2>
+        </div>
+        @*form column*@
+        <div class="row d-flex justify-content-around">
+            <div class="col-md-5">
+                <div class="form_container">
+                    <form method="POST" asp-controller="Home" asp-action="ContactUs">
+                        <div>
+                            <label>Email: </label>
+                            <input type="email" class="form-control" placeholder="demo@example.com" asp-for="Email"/>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <label>Subject: </label><br />
+                            <input type="text" class="form-control"  asp-for="Subject"/>
+                            <span asp-validation-for="Subject"></span>
+                        </div>
+
+                        <div>
+                            <textarea  asp-for="MessageContent" rows="6" style="width:100%; border-radius:1%;"></textarea>
+                            <span asp-validation-for="MessageContent"></span>
+                        </div>
+                        <div class="btn_box">
+                            <button>
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            @*Image column*@
+
+            <div class="col-md-5">
+                <img src=@Url.Content("~/Home/images/contact us image.jpg") alt="contact us image" asp-append-version="true">
+            </div>
+        </div>
+
+
+               
+    </div>
+</section>
+<!-- end Contact us section -->
+                       

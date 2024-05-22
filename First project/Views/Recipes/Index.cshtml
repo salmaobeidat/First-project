@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Recipe>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_ChefLayout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div class="table-responsive">
+<table class="table  table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RecipeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeTakes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalCalories)
+            </th>
+
+
+            <th>
+                @Html.DisplayNameFor(model => model.RecipeImagePath)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecipeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeTakes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                        @Html.DisplayFor(modelItem =>item.TotalCalories)
+            </td>
+
+            <td>
+               <img src=@Url.Content("~/RecipesImages/" + item.RecipeImagePath)
+                asp-append-version="true" style="border-radius:50%;" width="70" height="70" />
+            </td>
+
+            <td>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.Status.StatusName)
+            </td>
+
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.RecipeId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.RecipeId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.RecipeId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>

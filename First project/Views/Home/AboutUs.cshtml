@@ -1,0 +1,35 @@
+﻿@model Aboutu
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- about section -->
+
+<section class="about_section layout_padding">
+    <div class="container  ">
+        <div class="row">
+            <div class="col-md-6 ">
+                <div class="img-box">
+                    <img src=@Url.Content("~/images/" + @Model.AboutusImagePath)
+                         alt="About us page image" asp-append-version="true">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="detail-box">
+                    <div class="heading_container">
+                        <h2>
+                            @Model.Header
+                        </h2>
+                    </div>
+                    <p>
+                        @Model.AboutusContent
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- end about section -->

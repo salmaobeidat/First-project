@@ -1,0 +1,68 @@
+﻿@model Register
+
+@{
+	Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+
+<div class="card-body">
+    <h2 class="title">Chef Registration Info</h2>
+    <form method="POST" asp-controller="Auth" asp-action="ChefRegister">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        @*user name*@
+        <div class="input-group">
+            <input class="input--style-2" type="text" placeholder="Name" asp-for="UserName">
+            <span asp-validation-for="UserName"></span>
+        </div>
+
+
+        @*Email*@
+        <div class="input-group">
+            <input class="input--style-2" type="email" placeholder="Example@example.com" asp-for="Email">
+            <span asp-validation-for="Email"></span>
+        </div>
+
+        @*Password*@
+        <div class="input-group">
+            <input class="input--style-2" type="password" placeholder="Password" asp-for="Password">
+            <span asp-validation-for="Password"></span>
+        </div>
+
+       
+        <div class="row row-space">
+            @*Birthdate*@
+            <div class="col-2">
+                <div class="input-group">
+                    <input class="input--style-2 js-datepicker" type="text" placeholder="Birthdate"
+                           asp-for="Birthdate">
+                    <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+                </div>
+            </div>
+
+            @*Gender*@
+            <div class="col-2">
+                <div class="input-group">
+                    <div class="rs-select2 js-select-simple select--no-search">
+                        <select name="gender"  asp-for="Gender">
+                            <option disabled="disabled" selected="selected">Gender</option>
+                            <option  value="male">Male</option>
+                            <option  value="female">Female</option>
+                        </select>
+                        <div class="select-dropdown"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        @*specialization*@
+        <div class="input-group">
+            <input class="input--style-2" type="text" placeholder="specialization" asp-for="Specialization">
+        </div>
+
+        <a asp-action="Login" asp-controller="Auth" class="aleardymember">I am already a memeber.</a>
+        <div class="p-t-30">
+            <button class="btn btn--radius btn--green" type="submit">Register</button>
+        </div>
+    </form>
+</div>

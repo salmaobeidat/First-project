@@ -1,0 +1,23 @@
+*
+{
+    box-sizing: border-box;
+}
+
+.register
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+.register-image
+{
+    width: 500px;
+    height: 600px;
+    border-radius: 2%;
+}
+
+.whole-container
+{
+    width: 100%;
+}
