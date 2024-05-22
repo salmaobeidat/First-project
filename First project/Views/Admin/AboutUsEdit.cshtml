@@ -1,0 +1,44 @@
+﻿@model Aboutu
+@{
+	Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<h1>Edit</h1>
+
+<h4>About us page content</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AboutUsEdit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="AboutUs" />
+
+
+            <div class="form-group">
+                <label asp-for="Header" class="control-label">The header of the section</label>
+                <input asp-for="Header" class="form-control" />
+                <span asp-validation-for="Header" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AboutusContent" class="control-label">Content:</label>
+                <input asp-for="AboutusContent" class="form-control" />
+                <span asp-validation-for="AboutusContent" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageFile" class="control-label">Upload Page image:</label>
+                <input asp-for="ImageFile" class="form-control" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="AboutUsIndex">Back to List</a>
+</div>
+

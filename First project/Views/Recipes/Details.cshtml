@@ -1,0 +1,87 @@
+﻿@model Recipe
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_ChefLayout.cshtml";
+
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Recipe</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RecipeName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RecipeName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TimeTakes)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TimeTakes)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TotalCalories)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TotalCalories)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RepcipePdfPath)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RepcipePdfPath)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RecipeImagePath)
+        </dt>
+        <dd class = "col-sm-10">
+            <img src=@Url.Content("~/RecipesImages/" + Model.RecipeImagePath)
+                 asp-append-version="true" style="border-radius:50%;" width="70" height="70" />
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Ingredients)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Ingredients)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Category.CategoryId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Status.StatusId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.User)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.User.UserId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.RecipeId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

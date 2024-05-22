@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Recipe>
+
+@{
+    ViewData["Title"] = "Recipes";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Recipes</h1>
+
+<!-- Requirement: Search for two dates on added recipes by the chef-->
+<br />
+<!--form to get all values and send them to the action at a time-->
+<!-- why name? to map between parameter and input value.-->
+<form asp-action="AddedRecipes">
+    <div class="form-group row">
+        <div class="col-sm-3">
+            <div class="label-main">
+                <label class="label label-default">Start date</label>
+            </div>
+            <input type="date" name="startDate" class="form-control">
+        </div>
+        <div class="col-sm-3">
+            <div class="label-main">
+                <label class="label label-default">End date</label>
+            </div>
+            <input type="date" class="form-control"
+                   name="endDate">
+        </div>
+        <div class="col-sm-3 d-flex align-items-end">
+            <button class="btn btn-inverse btn-round ">Search</button>
+        </div>
+    </div>
+
+
+</form>
+
+<br />
+<!--End of requirement-->
+<!-- Hover table card start -->
+<div class="card">
+    <div class="card-block table-border-style">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Recipe name</th>
+                        <th>Category name</th>
+                        <th>Chef name</th>
+                        <th>Creation date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.RecipeName</td>
+                            <td>@item.Category?.CategoryName</td>
+                            <td>@item.User?.UserName</td>
+                            <td>@item.Creationdate</td>
+                            <td>@item.Status?.StatusName</td>
+                            <td>
+                                <a class="btn btn-success btn-round" asp-action="RecipeAcceptance" asp-controller="Admin" asp-route-id="@item.RecipeId">Accept</a>
+                                <a class="btn btn-danger btn-round" asp-action="RecipeRejection" asp-controller="Admin" asp-route-id="@item.RecipeId">Reject</a>
+                                <a class="btn btn-warning btn-round" asp-action="RecipePend" asp-controller="Admin" asp-route-id="@item.RecipeId">Pending</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Hover table card end -->

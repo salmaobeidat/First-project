@@ -1,0 +1,58 @@
+﻿@model IEnumerable<First_project.Models.Homepage>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div class="card-block table-border-style">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SliderHeader)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SliderParagraph)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.BackgroundImage)
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SliderHeader)
+                        </td>
+                        <td>
+                            <textarea disabled cols="50" rows="7" style=" border: none; resize:none">
+                                @Html.DisplayFor(modelItem => item.SliderParagraph)
+                                </textarea>
+                        </td>
+                       
+                        <td>
+                            <img src=@Url.Content("~/images/" + @item.BackgroundImagePath)
+                             asp-append-version="true" style="border-radius:50%;" width="100" height="100" />
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.HomeId">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.HomeId">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.HomeId">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

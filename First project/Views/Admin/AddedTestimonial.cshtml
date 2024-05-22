@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Testimonial>
+@{
+    ViewData["Title"] = "AddedTestimonial";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    
+    int rowNumbering = 1;
+                    
+}
+
+<h1>Testimonial</h1>
+
+<!-- Hover table card start -->
+<div class="card">
+    <div class="card-block table-border-style">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Customer name</th>
+                        <th>Creation date</th>
+                        <th>Status</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach(var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @rowNumbering
+                            </td>
+                            <td>
+                                @item.User?.UserName
+                            </td>
+                            <td>
+                                @item.CreationDate
+                            </td>
+                            <td>
+                                @item.Status?.StatusName
+                            </td>
+                            <td>
+                                <a class="btn btn-success btn-round" asp-action="TestimonialAcceptance" asp-controller="Admin" asp-route-id="@item.TestimonialId">Accept</a>
+                                <a class="btn btn-danger btn-round" asp-action="TestimonialRejection" asp-controller="Admin" asp-route-id="@item.TestimonialId">Reject</a>
+                                <a class="btn btn-warning btn-round" asp-action="TestimonialPend" asp-controller="Admin" asp-route-id="@item.TestimonialId">Pending</a>
+                            </td>
+                            <td>
+                                <a asp-controller="Testimonials" asp-action="Details" asp-route-id="@item.TestimonialId">Details</a> |
+                                <a asp-controller="Testimonials" asp-action="Delete" asp-route-id="@item.TestimonialId">Delete</a>
+                            </td>
+                        </tr>
+                        {
+                            rowNumbering++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Hover table card end -->

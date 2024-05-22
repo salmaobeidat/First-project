@@ -1,0 +1,49 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    //to access databag's data
+    List<Recipe> recipes = ViewBag.Recipes;
+
+}
+
+<section class="food_section layout_padding">
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h4>
+               @recipes.First().Category.CategoryName
+            </h4>
+        </div>
+
+
+        <div class="filters-content">
+            <div class="row grid">
+                @foreach (var item in recipes)
+                {               
+                <div class="col-sm-6 col-lg-4 all pizza">
+                    <div class="box">
+                        <div>
+                                <div class="img-box">
+                                    <img src=@Url.Content("~/RecipesImages/"+@item.RecipeImagePath)
+                                     asp-append-version="true"
+                                         class="img-fluid" style="height: 200px;  width:150px">
+                                </div>
+                                <div class="detail-box">
+                                    <h6 class="text-center" style="color: #ffbe33;">
+                                         @item.RecipeName
+                                    </h6>
+                                    <p style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 100%;">
+                                        @item.Description
+
+                                    <h6>Price: @item.Price</h6>
+                                    <a>Buy Now</a>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+                }
+            </div>
+        </div>
+
+    </div>
+</section>

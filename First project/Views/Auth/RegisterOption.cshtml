@@ -1,0 +1,16 @@
+﻿@{
+	Layout = "~/Views/Shared/_RegisterOptionLayout.cshtml";
+}
+
+
+<h1 class="text-center my-4">Welcome to Recipe Blog</h1>
+<div class=" row d-flex justify-content-around whole-container">
+    <div class="register col-lg-5 col-sm-10 ">
+        <a  class="btn btn-warning btn-lg r-chef me-3" asp-action="ChefRegister" asp-controller="Auth">Register as Chef</a>
+        <a class="btn btn-warning btn-lg" asp-controller="Auth" asp-action="CustomerRegister">Register as Customer</a>
+    </div>
+    <div class="col-lg-5">
+        <img src="~/RegOption/images/Register image.jpg" alt="chef image" class="register-image d-none d-lg-block">
+    </div>
+</div>
+

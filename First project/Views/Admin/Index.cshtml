@@ -1,0 +1,54 @@
+﻿
+<!-- one object is passed.-->
+@model User
+
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var recipeCount = ViewBag.AddedRecipes == null ? 0 : ViewBag.AddedRecipes;
+
+}
+
+<!-- Render -->
+<div class="page-body">
+    <div class="row d-flex justify-content-around">
+        <!-- card1 start -->
+        <div class="col-md-6 col-xl-3">
+            <div class="card widget-card-1">
+                <div class="card-block-small">
+                <i class="icofont  bg-c-blue card1-icon"><i class="ti-user"></i></i>
+                    <span class="text-c-blue f-w-600">Registered Users</span>
+                    <h4>@ViewBag.CustomerCount</h4>
+                    <a asp-action="Registered">Details</a>
+                </div>
+            </div>
+        </div>
+        <!-- card1 end -->
+        <!-- card2 start -->
+        <div class="col-md-6 col-xl-3">
+            <div class="card widget-card-1">
+                <div class="card-block-small">
+                    <i class="icofont  bg-c-blue card1-icon"><i class="ti-user"></i></i>
+                    <span class="text-c-blue f-w-600">Registered Chefs</span>
+                    <h4>@ViewBag.ChefCount</h4>
+                    <a asp-action="RegisteredChefs">Details</a>
+                </div>
+            </div>
+        </div>
+        <!-- card2 end -->
+        <!-- card1 start -->
+        <div class="col-md-6 col-xl-3">
+            <div class="card widget-card-1">
+                <div class="card-block-small">
+                    <i class="icofont  bg-c-blue card1-icon"><i class="ti-receipt"></i></i>
+                    <span class="text-c-blue f-w-600">Added recipes</span>
+                    <h4>@recipeCount</h4>
+                </div>
+            </div>
+        </div>
+        <!-- card1 end -->
+
+
+    </div>
+</div>
+<!-- End of Render -->

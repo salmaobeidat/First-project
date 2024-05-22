@@ -1,0 +1,42 @@
+﻿@model First_project.Models.VisaChecher
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>VisaChecher</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Cvc)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Cvc)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CardHolderName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CardHolderName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CardNumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CardNumber)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Balance)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Balance)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.VisaChecherId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
