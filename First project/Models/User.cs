@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace First_project.Models;
 
 public partial class User
 {
     public decimal UserId { get; set; }
-
+    [Display(Name = "User name")]
     public string UserName { get; set; } = null!;
 
     public string? Gender { get; set; }
@@ -19,6 +21,9 @@ public partial class User
     public DateTime? Birthdate { get; set; }
 
     public string? Profileimagepath { get; set; }
+    [Display(Name = "Profile Image")]
+    [NotMapped]
+    public IFormFile ProfileImage { get; set; }
 
     public virtual Credential? Credential { get; set; }
 

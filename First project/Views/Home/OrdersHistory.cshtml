@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Order>
+@{
+    ViewData["Title"] = "OrdersHistory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int rowCount = 1;
+
+}
+
+<div class="row  d-flex justify-content-center  my-4">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title mb-3">@Model.FirstOrDefault().User.UserName 's orders</h4>
+
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Order date</th>
+                                <th>Recipe name</th>
+                                <th>Chef name</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var orderDetails in Model)
+                            {
+                                <tr>
+                                    <td>@rowCount</td>
+                                    <td>@orderDetails.OrderDate</td>
+                                    <td>@orderDetails.Recipe?.RecipeName</td>
+                                    <td>@orderDetails.Recipe?.User?.UserName</td>
+                                    <td>@orderDetails.Recipe?.Price <sub>JOD</sub></td>
+                                </tr>
+
+                                { rowCount += 1; }
+                            }
+                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

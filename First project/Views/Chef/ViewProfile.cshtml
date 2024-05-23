@@ -1,0 +1,54 @@
+﻿@model User
+
+@{
+    ViewData["Title"] = "ViewProfile";
+    Layout = "~/Views/Shared/_ChefLayout.cshtml";
+}
+
+<h2 class="mx-4">@Model.UserName Profile</h2>
+<br />
+<br />
+
+<div class="d-flex justify-content-center mb-4">
+    <div class="card p-4">
+        @{
+            if (@Model.Profileimagepath == null)
+            {
+                <img src=@Url.Content("~/images/user.jpg")
+                 class="card-img-top"
+             asp-append-version="true"
+                 alt="Customer image">
+            }
+            else
+            {
+                <img src=@Url.Content("~/images/" + @Model.Profileimagepath)
+                 class="card-img-top"
+             asp-append-version="true"
+                 alt="Customer image">
+            }
+        }
+        <div class="card-body">
+            <div class="col-6 b-r-default">
+                <h2>User: @Model.UserName</h2>
+                <h4>Specialization: @Model.Specialization </h4>
+                <h4>Gender: @Model.Gender</h4>
+                <h4> Birthdate: @Model.Birthdate</h4>
+            </div>
+
+            <div class="form-group">
+                <a asp-action="UpdateProfile" asp-controller="Chef" asp-route-id="@Model.UserId"
+                   value="Update"
+                   class="btn btn-default"
+                   style=" border: none;
+                            border-radius: 45px;
+                            background-color: #ffbe33;
+                            color:#fff;
+                            padding: 8px 30px;">
+                    Update profile
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+

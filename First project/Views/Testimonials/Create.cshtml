@@ -30,9 +30,6 @@
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                         <div class="form-group">
-                            @*  <label asp-for="TestimonialContent" class="control-label"></label>
-
-                            *@
                             <textarea asp-for="TestimonialContent" rows="6" style="width:100%; border-radius:1%;"></textarea>
                             <span asp-validation-for="TestimonialContent" class="text-danger"></span>
                         </div>
@@ -55,13 +52,3 @@
     </div>
 </section>
 <!-- end Contact us section -->
-@*
-@section Scripts {
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            if (document.querySelector(".alert-success")) {
-                document.querySelector("form").reset();
-            }
-        });
-    </script>
-}*@

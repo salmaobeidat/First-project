@@ -1,4 +1,4 @@
-﻿@model First_project.Models.Recipe
+﻿@model Recipe
 
 @{
     ViewData["Title"] = "Delete";
@@ -66,20 +66,20 @@
             @Html.DisplayNameFor(model => model.Category)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.CategoryId)
+            @Html.DisplayFor(model => model.Category.CategoryName)
         </dd>
-        <dt class = "col-sm-2">
+       @* <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Status)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Status.StatusId)
-        </dd>
-        <dt class = "col-sm-2">
+        </dd>*@
+       @* <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.User)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.User.UserId)
-        </dd>
+        </dd>*@
     </dl>
     
     <form asp-action="Delete">
