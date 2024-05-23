@@ -1,0 +1,44 @@
+﻿@model User
+@{
+    ViewData["Title"] = "ViewProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.UserName Profile</h2>
+
+
+
+<br />
+<br />
+
+
+<div class="d-flex justify-content-around">
+    <div class="card" style="width: 18rem;">
+        @{
+            if(@Model.Profileimagepath==null)
+            {
+                <img src=@Url.Content("~/images/user.jpg")
+                 class="card-img-top"
+             asp-append-version="true"
+                 alt="Customer image">
+            }
+            else
+            {
+                <img src=@Url.Content("~/images/" + @Model.Profileimagepath)
+                 class="card-img-top"
+             asp-append-version="true"
+                 alt="Customer image">
+            }
+        }
+        <div class="card-body">
+            <div class="col-6 b-r-default">
+                <h2>User: @Model.UserName</h2>
+                <h4>Gender: @Model.Gender</h4>
+                <h4> Birthdate: @Model.Birthdate</h4>
+            </div>
+        </div>
+    </div>
+    <a asp-action="UpdateProfile" asp-controller="Home" asp-route-id="@Model.UserId">Update profile</a>
+</div>
+   
+

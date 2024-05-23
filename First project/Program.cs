@@ -20,6 +20,8 @@ namespace First_project
                 options.IdleTimeout = TimeSpan.FromSeconds(30);
             });
             builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+            builder.Services.AddHttpContextAccessor();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -42,7 +42,15 @@ body {
   overflow-x: hidden;
 }
 
+//added css
 
+.btn_box >button{
+    border: none;
+    border-radius: 45px;
+    background-color: #ffbe33;
+    color:#fff;
+    padding: 8px 30px;
+}
 
 
 .layout_padding {

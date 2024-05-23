@@ -20,7 +20,7 @@ namespace First_project.Controllers
         {
             //open session with chef
             var chefId =  HttpContext.Session.GetInt32("chefSession");
-            var chefInfo = await _context.Users.Where(admin => admin.UserId == chefId).SingleOrDefaultAsync();
+            var chefInfo = await _context.Users.Where(x => x.UserId == chefId).SingleOrDefaultAsync();
 
             ViewBag.categories =await _context.Categories.ToListAsync();
             ViewBag.recipes =await _context.Recipes.ToListAsync();

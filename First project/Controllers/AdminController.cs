@@ -1,5 +1,6 @@
 ﻿using First_project.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using static NuGet.Packaging.PackagingConstants;
 
@@ -32,8 +33,29 @@ namespace First_project.Controllers
             ViewBag.AddedRecipes = _context.Recipes.Count();
 
             var adminID = HttpContext.Session.GetInt32("adminSession");
-            var adminInfo = await _context.Users.Where(admin => admin.UserId == adminID).SingleOrDefaultAsync();
-            return View(adminInfo);
+            
+             ViewBag.adminInfo = await _context.Users.Where(admin => admin.UserId == adminID).SingleOrDefaultAsync();
+
+
+
+            //Chart creation --> Number of Pending, rejected and Accepted recipes
+
+            //Labels for X-axis
+            var xAxis = new List<string>{ "Accepted","Rejected","Pending"};
+
+
+            var acceptedCount =  _context.Recipes.Include(s => s.Status).Where(s => s.StatusId == 2).Count();
+            var rejectedCount =  _context.Recipes.Include(s => s.Status).Where(s => s.StatusId == 3).Count();
+            var pendingCount =  _context.Recipes.Include(s => s.Status).Where(s => s.StatusId == 1).Count();
+
+            //Values on y-axis 
+            var yAxis = new List<int> { acceptedCount,rejectedCount,pendingCount};
+
+            //Chart creation 
+             var Chart = Tuple.Create<IList<string>, IList<int> >(xAxis, yAxis);
+
+
+            return View(Chart);
         }
 
         //requirement:can view the details of registered users.
@@ -218,7 +240,120 @@ namespace First_project.Controllers
             return RedirectToAction("CategoryIndex", "Admin");
         }
 
+        //Requirement: Update profile 
+        [HttpGet]
+        public async Task<IActionResult> UpdateProfile(decimal? id)
+        {
 
+            if (id == null || _context.Users == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "RoleId", user.RoleId);
+            return View(user);
+            
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateProfile(decimal id, User user)
+        {
+            var session = HttpContext.Session.GetInt32("adminSession");
+            if (id != user.UserId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    //Find if the user is exist or not
+                    var userInfo = await _context.Users.Where(u => u.UserId == session).SingleOrDefaultAsync();
+
+                    //upload image 
+                    //path link
+                    string wwwRootPath = _webHostEnvironment.WebRootPath;
+                    string imageName = Guid.NewGuid().ToString() + user.ProfileImage.FileName;
+                    string fullPath = Path.Combine(wwwRootPath + "/images/", imageName);
+
+                    //adding the image to the path by reading the stram of bits of the image
+                    using (var fileStream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await user.ProfileImage.CopyToAsync(fileStream);
+                    }
+
+                    //update values based on the recieving object from user.
+                    userInfo.UserName = user.UserName;
+
+                    userInfo.Gender = user.Gender;
+
+                    userInfo.Birthdate = user.Birthdate.Value.Date;
+                    userInfo.Profileimagepath = imageName;
+
+                    _context.Update(userInfo);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(user.UserId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("UpdateProfile","Admin");
+            }
+            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "RoleId", user.RoleId);
+            return RedirectToAction("UpdateProfile", "Admin");
+        }
+
+        private bool UserExists(decimal id)
+        {
+            return (_context.Users?.Any(e => e.UserId == id)).GetValueOrDefault();
+        }
+        //End of requirement
+
+        //Requirement: View profile --> For admin
+        [HttpGet]
+        public async Task<IActionResult> ViewProfile(decimal? id = null)
+        {
+            var sessionId = HttpContext.Session.GetInt32("adminSession");
+
+            if (id == null || _context.Users == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            // Retrieve the adminSession from session and cast it to decimal
+            //var sessionId = HttpContext.Session.GetInt32("adminSession");
+            if (sessionId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            id = (decimal)sessionId;
+
+            var user = await _context.Users
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(u => u.UserId == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        //End of requirement
 
         // GET: Categories/Details/5
         public async Task<IActionResult> CategoryDetails(decimal? id)
