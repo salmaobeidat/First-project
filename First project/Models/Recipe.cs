@@ -18,6 +18,7 @@ public partial class Recipe
     [DisplayName("Total calories")]
     public decimal? TotalCalories { get; set; }
     [NotMapped]
+    [DisplayName("Recipe image")]
     public IFormFile RecipeImage { get; set; }
 
     public string? Description { get; set; }

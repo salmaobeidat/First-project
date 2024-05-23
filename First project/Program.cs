@@ -17,9 +17,11 @@ namespace First_project
             builder.Services.AddSession(options =>
             { 
                 //how to much time it will keep session's data.
-                options.IdleTimeout = TimeSpan.FromSeconds(30);
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
             });
             builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+            builder.Services.AddHttpContextAccessor();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

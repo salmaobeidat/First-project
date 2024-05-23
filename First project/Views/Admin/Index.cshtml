@@ -1,13 +1,15 @@
-﻿
+﻿@model Tuple<IList<string>, IList<int> >
 <!-- one object is passed.-->
-@model User
-
 
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     var recipeCount = ViewBag.AddedRecipes == null ? 0 : ViewBag.AddedRecipes;
 
 }
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
 <!-- Render -->
 <div class="page-body">
@@ -47,8 +49,59 @@
             </div>
         </div>
         <!-- card1 end -->
-
-
     </div>
 </div>
+
+<!-- Chart Creation-->
+
+<div class="col-md-12 col-lg-6">
+    <div class="card">
+        <div class="card-header">
+            <h5>Statistics on Added recipes</h5>
+            <div class="card-header-right">                                                     
+                <i class="icofont icofont-spinner-alt-5"></i>                                               
+                </div>
+        </div>
+        <div class="card-block">
+                <canvas id="myChart"></canvas>
+        </div>
+    </div>
+</div>
+
 <!-- End of Render -->
+
+
+<!-- why JSON? C# is server side language, Meanwhile JavaScript client side language, so they's not 
+    complatable.
+-->
+
+
+<script>
+    //if should be identical
+    const ctx = document.getElementById('myChart');
+
+    var x=@Json.Serialize(Model.Item1)
+    var y= @Json.Serialize(Model.Item2)
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            //label represents X-axis 
+            labels: x,
+            datasets: [{
+                label: '# of Added recipes',
+                data: y,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+
+

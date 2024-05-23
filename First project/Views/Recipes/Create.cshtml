@@ -18,6 +18,12 @@
                 <input asp-for="RecipeName" class="form-control" />
                 <span asp-validation-for="RecipeName" class="text-danger"></span>
             </div>
+            <div class="form-group" style="display:none;">
+                <label asp-for="User" class="control-label"></label>
+                <input asp-for="User" class="form-control" type="hidden" />
+                <span asp-validation-for="User" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="TimeTakes" class="control-label"></label>
                 <input asp-for="TimeTakes" class="form-control" />

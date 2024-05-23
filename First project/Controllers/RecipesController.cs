@@ -25,18 +25,32 @@ namespace First_project.Controllers
         // GET: Recipes
         public async Task<IActionResult> Index()
         {
-            var modelContext = _context.Recipes.Include(r => r.Category).Include(r => r.Status).Include(r => r.User);
+            var chefId = HttpContext.Session.GetInt32("chefSession");
+            if (chefId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+
+            var modelContext = _context.Recipes.Include(r => r.Category)
+                .Include(r => r.Status).Include(r => r.User)
+                .Where(r=>r.User.UserId==chefId);
             return View(await modelContext.ToListAsync());
         }
 
         // GET: Recipes/Details/5
         public async Task<IActionResult> Details(decimal? id)
         {
+            var chefId = HttpContext.Session.GetInt32("chefSession");
+            if ( chefId ==null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
             if (id == null || _context.Recipes == null)
             {
                 return NotFound();
             }
-
             var recipe = await _context.Recipes
                 .Include(r => r.Category)
                 .Include(r => r.Status)
@@ -51,8 +65,15 @@ namespace First_project.Controllers
         }
 
         // GET: Recipes/Create
-        public IActionResult Create()
+        public IActionResult Create(decimal? id)
         {
+            var chefId = HttpContext.Session.GetInt32("chefSession");
+            if ( chefId==null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
             ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusId");
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId");
@@ -60,8 +81,6 @@ namespace First_project.Controllers
         }
 
         // POST: Recipes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Recipe recipe)
@@ -101,6 +120,12 @@ namespace First_project.Controllers
         // GET: Recipes/Edit/5
         public async Task<IActionResult> Edit(decimal? id)
         {
+            var chefId = HttpContext.Session.GetInt32("chefSession");
+            if (chefId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
             if (id == null || _context.Recipes == null)
             {
                 return NotFound();

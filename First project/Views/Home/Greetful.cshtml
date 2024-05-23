@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewData["Title"] = "Greetful";
+    Layout = "~/Views/Shared/_GreetfulLayout.cshtml";
+}
+
+<main class="cd__main">
+
+    <div class="jumbotron text-center">
+        <h1 class="display-3">Thank You!</h1>
+        <p class="lead"><strong>Please check your email</strong> to be sure that Purchase procedure completed.</p>
+        <hr>
+        <p>
+            Having trouble? <a asp-action="ContactUs">Contact us</a>
+        </p>
+        <p class="lead">
+            <a class="btn btn-primary btn-sm" asp-action="Index" asp-controller="Home" role="button">Continue to homepage</a>
+        </p>
+    </div>
+</main>
+

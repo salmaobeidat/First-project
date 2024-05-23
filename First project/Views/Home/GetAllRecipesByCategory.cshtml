@@ -1,9 +1,8 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    //to access databag's data
+    //to access viewbag's data
     List<Recipe> recipes = ViewBag.Recipes;
-
 }
 
 <section class="food_section layout_padding">
@@ -35,7 +34,10 @@
                                         @item.Description
 
                                     <h6>Price: @item.Price</h6>
-                                    <a>Buy Now</a>
+                                        <a asp-controller="Home" 
+                                        asp-action="Purchase"
+                                       asp-route-id="@item.RecipeId" 
+                                       style="color: #ffbe33;">Buy Now</a>
                                 </div>
                         </div>
                     </div>

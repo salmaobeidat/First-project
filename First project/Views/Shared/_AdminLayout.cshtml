@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http;
+@inject ModelContext _context;
+@inject IHttpContextAccessor accessor;
+
+@{
+    var adminId = accessor.HttpContext.Session.GetInt32("adminSession");
+}
+
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -29,6 +38,7 @@
     <!-- Style.css -->
     <link rel="stylesheet" type="text/css" href="~/Admin/css/style.css">
     <link rel="stylesheet" type="text/css" href="~/Admin/css/jquery.mCustomScrollbar.css">
+
 </head>
 
 <body>
@@ -148,6 +158,7 @@
                                     </li>
                                 </ul>
                             </li>
+                            
                             <li class="user-profile header-notification">
                                 <a href="#!">
                                     <img src="~/Admin/images/avatar-4.jpg" class="img-radius" alt="User-Profile-Image">
@@ -155,33 +166,21 @@
                                     <i class="ti-angle-down"></i>
                                 </a>
                                 <ul class="show-notification profile-notification">
+
                                     <li>
-                                        <a href="#!">
-                                            <i class="ti-settings"></i> Settings
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
+                                        <a asp-action="ViewProfile" asp-controller="Admin" asp-route-id="@adminId">
                                             <i class="ti-user"></i> Profile
                                         </a>
                                     </li>
+
                                     <li>
-                                        <a href="#">
-                                            <i class="ti-email"></i> My Messages
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="ti-lock"></i> Lock Screen
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="auth-normal-sign-in.html">
+                                        <a asp-action="Logout" asp-controller="Auth">
                                             <i class="ti-layout-sidebar-left"></i> Logout
                                         </a>
                                     </li>
                                 </ul>
                             </li>
+
                         </ul>
                     </div>
                 </div>

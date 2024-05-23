@@ -1,5 +1,6 @@
 ﻿using First_project.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using static NuGet.Packaging.PackagingConstants;
 
@@ -18,6 +19,12 @@ namespace First_project.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var adminId = HttpContext.Session.GetInt32("adminSession");
+
+            if (adminId== null)
+            {
+                return RedirectToAction("Login","Auth");
+            }
             var userCount = _context.Users
             .Include(user => user.Role);
 
@@ -32,8 +39,29 @@ namespace First_project.Controllers
             ViewBag.AddedRecipes = _context.Recipes.Count();
 
             var adminID = HttpContext.Session.GetInt32("adminSession");
-            var adminInfo = await _context.Users.Where(admin => admin.UserId == adminID).SingleOrDefaultAsync();
-            return View(adminInfo);
+            
+             ViewBag.adminInfo = await _context.Users.Where(admin => admin.UserId == adminID).SingleOrDefaultAsync();
+
+
+
+            //Chart creation --> Number of Pending, rejected and Accepted recipes
+
+            //Labels for X-axis
+            var xAxis = new List<string>{ "Accepted","Rejected","Pending"};
+
+
+            var acceptedCount =  _context.Recipes.Include(s => s.Status).Where(s => s.StatusId == 2).Count();
+            var rejectedCount =  _context.Recipes.Include(s => s.Status).Where(s => s.StatusId == 3).Count();
+            var pendingCount =  _context.Recipes.Include(s => s.Status).Where(s => s.StatusId == 1).Count();
+
+            //Values on y-axis 
+            var yAxis = new List<int> { acceptedCount,rejectedCount,pendingCount};
+
+            //Chart creation 
+             var Chart = Tuple.Create<IList<string>, IList<int> >(xAxis, yAxis);
+
+
+            return View(Chart);
         }
 
         //requirement:can view the details of registered users.
@@ -218,7 +246,110 @@ namespace First_project.Controllers
             return RedirectToAction("CategoryIndex", "Admin");
         }
 
+        //Requirement: Update profile 
+        [HttpGet]
+        public async Task<IActionResult> UpdateProfile(decimal? id)
+        {
 
+            if (id == null || _context.Users == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "RoleId", user.RoleId);
+            return View(user);
+            
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateProfile(decimal id, User user)
+        {
+            var session = HttpContext.Session.GetInt32("adminSession");
+            if (id != user.UserId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    //Find if the user is exist or not
+                    var userInfo = await _context.Users.Where(u => u.UserId == session).SingleOrDefaultAsync();
+
+                    //upload image 
+                    //path link
+                    string wwwRootPath = _webHostEnvironment.WebRootPath;
+                    string imageName = Guid.NewGuid().ToString() + user.ProfileImage.FileName;
+                    string fullPath = Path.Combine(wwwRootPath + "/images/", imageName);
+
+                    //adding the image to the path by reading the stram of bits of the image
+                    using (var fileStream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await user.ProfileImage.CopyToAsync(fileStream);
+                    }
+
+                    //update values based on the recieving object from user.
+                    userInfo.UserName = user.UserName;
+
+                    userInfo.Gender = user.Gender;
+
+                    userInfo.Birthdate = user.Birthdate.Value.Date;
+                    userInfo.Profileimagepath = imageName;
+
+                    _context.Update(userInfo);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(user.UserId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                //To pass the User id to view.
+                return RedirectToAction(nameof(ViewProfile), new { id = user.UserId });
+            }
+            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "RoleId", user.RoleId);
+            return View(user);
+        }
+
+        private bool UserExists(decimal id)
+        {
+            return (_context.Users?.Any(e => e.UserId == id)).GetValueOrDefault();
+        }
+        //End of requirement
+
+        //Requirement: View profile --> For admin
+        [HttpGet]
+        public async Task<IActionResult> ViewProfile(decimal? id = null)
+        {
+
+            if (id == null || _context.Users == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+            var user = await _context.Users
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(u => u.UserId == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        //End of requirement
 
         // GET: Categories/Details/5
         public async Task<IActionResult> CategoryDetails(decimal? id)
@@ -621,45 +752,46 @@ namespace First_project.Controllers
         public async Task<IActionResult> Order()
         {
             //To get oders 
-            ViewBag.Order = await _context.Orders
+           var orders= await _context.Orders
                 .Include(u=>u.User)
                 .Include(r=>r.Recipe)
                 .ToListAsync();
 
-
-            return View();
+            return View(orders);
         }
-        [HttpPost]
-        public async Task<IActionResult> Order(DateTime startDate , DateTime endDate)
+        [HttpGet("FilterationOrder")]
+        public async Task<IActionResult> FilterationOrder(DateTime? startDate , DateTime? endDate)
         {
-
-            if (_context.Orders == null)
+            if (_context.Recipes == null)
             {
-                Problem("Entity set 'ModelContext.Categories'  is null.");
+                return Problem("Entity set 'ModelContext.Recipes'  is null.");
             }
             var Order = await _context.Orders
+                //buyer
                .Include(u => u.User)
                .Include(r => r.Recipe)
+               .Include(o => o.Recipe)
+               //chef
+               .Include(c=>c!.Recipe!.User)
                .ToListAsync();
-
 
             //why .Value.Date? to get date only without time
             if (startDate == null && endDate == null)
             {
                 //return all data without filtration
-                return View(Order);
+                return View("Order", Order);
             }
             else if (startDate != null && endDate == null)
             {
                 //return data from strating date till now
                 Order = Order.Where(x => x.OrderDate.Value.Date >= startDate).ToList();
-                return View(Order);
+                return View("Order", Order);
             }
             else if (startDate == null && endDate != null)
             {
                 //return data from the begening till the end date
                 Order = Order.Where(x => x.OrderDate.Value.Date <= endDate).ToList();
-                return View(Order);
+                return View("Order", Order);
             }
             else
             {
@@ -671,10 +803,83 @@ namespace First_project.Controllers
                     &&
                     x.OrderDate.Value.Date <= endDate)
                     .ToList();
-                return View(Order);
+                return View("Order", Order);
             }
-     
+
         }
+
+
+        //monthly report 
+        [HttpGet("MonthOrder")]
+        public async Task<IActionResult> MonthOrder(DateTime? monthDate)
+        {
+            if (_context.Recipes == null)
+            {
+                return Problem("Entity set 'ModelContext.Recipes' is null.");
+            }
+
+            var orders = await _context.Orders
+                // Include related entities
+                .Include(u => u.User)
+                .Include(r => r.Recipe)
+                .Include(o => o.Recipe)
+                .Include(c => c!.Recipe!.User)
+                .ToListAsync();
+
+            if (monthDate == null)
+            {
+                // Return all data without filtration
+                return View("Order", orders);
+            }
+            else
+            {
+                // Ensure monthDate has a value and add one month to it
+                DateTime startDate = monthDate.Value; // Extract the value from nullable DateTime
+                DateTime nextMonthDate = startDate.AddMonths(1);
+
+                // Filter orders for the specific duration
+                orders = orders
+                    .Where(x =>
+                        x.OrderDate.HasValue && // Ensure OrderDate is not null
+                        x.OrderDate.Value.Date >= startDate && // Start date comparison
+                        x.OrderDate.Value.Date < nextMonthDate // End date comparison (exclusive)
+                    )
+                    .ToList();
+
+                return View("Order", orders);
+            }
+        }
+
+        //Annual Oders 
+        [HttpGet("YearOrder")]
+        public async Task<IActionResult> YearOrder(int? year)
+        {
+            if (_context.Recipes == null)
+            {
+                return Problem("Entity set 'ModelContext.Recipes' is null.");
+            }
+
+            var orders = await _context.Orders
+                .Include(u => u.User)
+                .Include(r => r.Recipe)
+                .Include(o => o.Recipe)
+                .Include(c => c!.Recipe!.User)
+                .ToListAsync();
+
+            if (year == null)
+            {
+                return View("Order", orders);
+            }
+            else
+            {
+                orders = orders
+                    .Where(x => x.OrderDate.HasValue && x.OrderDate.Value.Year == year)
+                    .ToList();
+
+                return View("Order", orders);
+            }
+        }
+
 
 
         //End of requirement 
